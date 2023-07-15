@@ -13,15 +13,13 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class BooksService {
     private final BooksRepository booksRepository;
-    private final BooksRepository peopleRepository;
 
     @Autowired
-    public BooksService(BooksRepository booksRepository, BooksRepository peopleRepository) {
+    public BooksService(BooksRepository booksRepository) {
         this.booksRepository = booksRepository;
-        this.peopleRepository = peopleRepository;
     }
 
     public List<Book> findAll(boolean sortByYear) {
@@ -60,6 +58,7 @@ public class BooksService {
         booksRepository.deleteById(id);
     }
 
+    @Transactional
     public void appoint(int id, Person person) {
         Book book = booksRepository.findById(id).orElse(null);
         if (person == null) {
